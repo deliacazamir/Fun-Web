@@ -1,11 +1,23 @@
+Project Name : Fun-Web 
+Developers :
+
+Delia
 1.HTTP
-2.Transfer Async/AJAX
-3.Cookie
-4.Session
-5.WebSerevr
-6.REST 
-7.Security
-8.Mash-up
+2.Cookie *
+
+Cosmin
+3.Session   *
+4.WebServer *
+
+Ionut
+5.Transfer Async/AJAX
+6.REST *
+
+Mihai MG
+7.Security  *
+8.Mash-up   *
+
+
 
 
 1.Personajele din joc:
@@ -14,16 +26,21 @@
 - Clientul / Server
 
 2.Scopul jocului:
+Personajul trebuie sa-si dezvolte Serverul(inital stie sa transmita tot felul de pachete(GET/PUT/POST)...
+
 Intre client si server zboara pachetele
 Pachetele pot fi furate de catre Mobi
 Ai un numar maxim de pachete ce pot fi furate
-
+Pachetele au un traseu predefinit
 
 3.Mashup Factory - Pentru a trece la nivelul urmator trebuie sa mergi la un NonPlayerCharacter care iti prezinta reteta pentru nivelul urmator nivel 
 
-4.REST - Modul in care trimit materialele catre NPC 
+4.REST / WebServer - Modul in care trimit materialele catre NPC. Poti sa-ti cumperi un webserver cu un load balancer in fata, astfel , drumul parcus de 
+un pachet este mult mai scurt iar Mobi au un timp mai mic de a fura pachetele. 
 
-Mobi
+Nivelul X - Clientul trimite foarte multe pachete ce pot sa fie prinse , cu cat ai mai multe servere cu atat mai bine :d
+
+5.Mobi
 Dupa ce un mob este omorat automat el scapa anumite Item-uri. 
 Ele sunt colectate de Personaj.
 Cu Item-urile gasite te duci la NPC care iti face cheia pentru nivelul urmator
@@ -31,9 +48,29 @@ Cu Item-urile gasite te duci la NPC care iti face cheia pentru nivelul urmator
 !Poti sa faci Trading cu ceilalti jucatori
 Exista un Mobi care pot sa injecteze pachete pe drum . Ai un timeout in care poti sa-l omori sau un maxim de pachete false ce pot fi filtrate. 
 
+6.Security
+Ca sa-ti securizezi serverul ai nevoie de un Certificat. Acest certificat poti sa-l cumperi sau sa-l primesti de la NFC. 
+Dupa ce serverul a fost securizat pachetele vor fi mult mai greu furat de catre Mobi. Un pachet poate sa fie protejat. Mobul il fura dar trebuie sa indeparteze protectia ca sa fie furat.
+
+7.Session - O sesiune este un nivel . 
+
+8.Cookie
+La inceputul jocului ai punguta cu prajituri(arme/bani). Nu poti sa treci la urmatorul urmator cu punguta de cookie-uri. 
+Daca ai murit, in urmatorul nivel sacul de prajituri iti pastreaza tot ce ai colectionat pana atunci.
+-Exemplul 1:  Azi e Vineri 13 asa ca te vom omoram cand vrem noi, random :D. Nivelul se restarteaza din pozitia/item-urile in care te-am omorat.
+
+Cookie de autentificate - Un cookie poate sa fie furat,dar mai greu. Un cookie furat are un Damage de 50%. Pentru a securiza cookie-urile, ele trebuie criptate(solutie o primesti de la NPC) 
+
+9. HTTP
+
+La primul nivel apar pe harta si ma pot plimba. Trebuie sa plimb pachetele dintre client si server
+
+
+10. Multiplayer
+Poti sa-ti inviti un prieten folosind Facebook/Google ca sa te ajute sa treci un nivel . 
+
 
 AJAX - Comunicare asincron
-
 Esti notificat cand pachetele transmise sunt atacate. 
 Esti notificat de tipul atacului si armele necesare?
 
