@@ -10,7 +10,7 @@ Cosmin
 4.WebServer *
 
 Ionut
-5.Transfer Async/AJAX
+5.Transfer Async/AJAX 
 6.REST *
 
 Mihai MG
@@ -68,6 +68,11 @@ La primul nivel apar pe harta si ma pot plimba. Trebuie sa plimb pachetele dintr
 
 10. Multiplayer
 Poti sa-ti inviti un prieten folosind Facebook/Google ca sa te ajute sa treci un nivel . 
+
+
+11. Transfer async ???!!!?!?!?!?
+Clientul face request la resurse . La primul nivel ele sunt servite in ordine . Pentru transferul asyncron ele sunt servite random. 
+
 
 
 AJAX - Comunicare asincron
