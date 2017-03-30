@@ -1,0 +1,48 @@
+1.HTTP
+2.Transfer Async/AJAX
+3.Cookie
+4.Session
+5.WebSerevr
+6.REST 
+7.Security
+8.Mash-up
+
+
+1.Personajele din joc:
+- Jucatori - Persoane autentificate
+- Mobi - inamicul
+- Clientul / Server
+
+2.Scopul jocului:
+Intre client si server zboara pachetele
+Pachetele pot fi furate de catre Mobi
+Ai un numar maxim de pachete ce pot fi furate
+
+
+3.Mashup Factory - Pentru a trece la nivelul urmator trebuie sa mergi la un NonPlayerCharacter care iti prezinta reteta pentru nivelul urmator nivel 
+
+4.REST - Modul in care trimit materialele catre NPC 
+
+Mobi
+Dupa ce un mob este omorat automat el scapa anumite Item-uri. 
+Ele sunt colectate de Personaj.
+Cu Item-urile gasite te duci la NPC care iti face cheia pentru nivelul urmator
+!Item-urile pot fi duplicate
+!Poti sa faci Trading cu ceilalti jucatori
+Exista un Mobi care pot sa injecteze pachete pe drum . Ai un timeout in care poti sa-l omori sau un maxim de pachete false ce pot fi filtrate. 
+
+
+AJAX - Comunicare asincron
+
+Esti notificat cand pachetele transmise sunt atacate. 
+Esti notificat de tipul atacului si armele necesare?
+
+Personajul se poate misca pe harta.
+Personajul isi alege arma cu care vrea sa omoare atacatorul;
+Personajul castiga bani in functie de rapiditatea cu care rezolva un nivel. 
+Personajul interactioneaza cu ceilalti jucatori. Ei pot sa faca schimb de Item-uri.
+
+
+
+ 
+
