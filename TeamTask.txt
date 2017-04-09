@@ -1,0 +1,23 @@
+Saptamana 9
+
+1. Proiectarea si implementarea interfetei Web responsive  Vor fi ofertie motivatii asupra alegerii unei anumite idei de design
+2. Prezentarea arhitecturii de ansamblu (UML) plus etapele intermediare ale dezvoltarii proiectului(Roadmap)
+3. Biblografi - Web Api(Facebook/Twitter)
+
+
+
+Tehnologii folosite : Bootstrap 3, (Javascript / Node.js , Phaser,Express) Tiled(map software), MongoDB
+Sa se scrie o descriere pentru fiecare tehnologie folosita si la ce o folosim
+
+Sa fie scris tot in Scholarly HTML/Rolul fiecarui membru al echipei.
+
+-1. Documentation 
+0. Frontend 
+1. MVC + Login with Facebook/Twitter
+2. Rest API 
+3. DB <-> Node.js comunication
+4. POC first phase  - load the map and try walking on the map with your charcater
+5. Create maps for each level
+6. Second phase - Collision detection with non-moving objects and then try to detect collisons with moving objects.
+7. Third phase  - Multiplayer 
+
