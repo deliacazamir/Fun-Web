@@ -74,6 +74,10 @@ Poti sa-ti inviti un prieten folosind Facebook/Google ca sa te ajute sa treci un
 Clientul face request la resurse . La primul nivel ele sunt servite in ordine . Pentru transferul asyncron ele sunt servite random. 
 
 
+HTTP: Trebuie sa aduci niste informatii de la server intr-o anumita ordine folosind anumite methode. Te duci la client si faci cum ti-a zis NFC. Ridici pachetul GET si URL-ul 
+care trebuie construit din Expresia "http://" "www."mygame.com/" "login". Trebuie sa-l duci la server fara sa fie furat(ai 3 incercari). De la server te intorci cu un raspuns(Bad Request), la fel el poate fi furat
+daca constructia este corecta primesti o resursa sau schimbi ceva. 
+
 
 AJAX - Comunicare asincron
 Esti notificat cand pachetele transmise sunt atacate. 
