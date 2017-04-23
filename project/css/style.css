@@ -1,0 +1,26 @@
+.col-md-9 {
+    overflow: hidden;
+}
+
+.col-md-3 {
+    padding-bottom: 100%;
+    margin-bottom: -100%;
+    background-color: black;
+}
+.col {
+  text-align: center;
+}
+#back {
+      background-image: url('wall1.png');
+      
+}
+#meniu_mijloc {
+   margin-top:40%;
+   width:100%;
+   background-color : transparent;
+}
+.btn-warning {
+   padding:2%;
+   width:70%;
+
+}
