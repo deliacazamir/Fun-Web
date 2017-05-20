@@ -1,5 +1,5 @@
 
-var game = new Phaser.Game(960,960,Phaser.AUTO,'',{preload:preload,create:create,update:update,});
+var game = new Phaser.Game(960,960,Phaser.AUTO,'game_div',{preload:preload,create:create,update:update,});
 
 function tilePropertyToGid(value, map, property) {    
     var keys, i, i2;    
@@ -77,7 +77,7 @@ function create(){
     //crate cursor keys
     keyboard = game.input.keyboard.createCursorKeys();
 
-    //create bullets group and enable collisions
+    //create bullets group and enable collisions    
     bullets = game.add.group();
     bullets.enableBody = true;
     bullets.physicsBodyType = Phaser.Physics.ARCADE;
