@@ -308,11 +308,11 @@
 930,930,930,930,930,930,930,930,930,930,930,930,930,930,930,930,930,930,930,930,930,930,930,930,930,930,930,930,930,930
 </data>
  </layer>
- <objectgroup name="objects">
+ <objectgroup name="objects" visible="0">
   <object id="13" x="256" y="158" width="32" height="32"/>
   <object id="14" x="638.667" y="160" width="32" height="32"/>
  </objectgroup>
- <layer name="collisionLayer" width="30" height="30">
+ <layer name="collisionLayer" width="30" height="30" visible="0">
   <properties>
    <property name="collision" type="bool" value="true"/>
   </properties>
@@ -349,7 +349,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="treesAndObjects" width="30" height="30" visible="0">
+ <layer name="treesAndObjects" width="30" height="30">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,989,990,991,992,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -383,7 +383,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="roofsAndFences" width="30" height="30" visible="0">
+ <layer name="roofsAndFences" width="30" height="30">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,1057,1058,1058,1058,1059,0,0,0,0,0,0,1057,1058,1058,1058,1058,1058,1059,0,0,0,0,0,0,
