@@ -113,7 +113,7 @@ function update(){
 
     if(keyboard.left.isDown ){
         // player.body.moveLeft(50);
-        player.body.velocity.x -=100;
+        player.body.velocity.x -=1000;
         currentAnim = player.animations.play('leftMovement',10,true);
     }
     if(keyboard.right.isDown){

@@ -1,3 +1,4 @@
+
 var lobby_2={
 
     map:null,
@@ -12,27 +13,65 @@ var lobby_2={
     fireRate:null,
     nextFire:null,
     objectLayer:null,
-    http_point:null,
-    mashu_up_point:null,
-
+    first_trigger:null,
+    second_trigger:null,
+    thirdboss_trigger:null,
+    boss_weapon1:null,
+    boss1:null,
+    boss2:null,
+    boss3:null,
+    triggerGroup:null,
+    weapon:null,
+    pointer:null,
+    boss_trigger:null,
+    follow_timer:null,
+    spawned_boss:null,
+    boss_weapon2:null,
+    bosses_killed:null,
+    mashup_text:null,
+    camera_shaken:null,
+    wizard1:null,
+    wizard2:null,
+    npc_group:null,
+    challenge_accepted:false,
+    changes_made:false,
+    challenge_c:null,
+    challenge_countdown:null,
+    challenge_timer:null,
+    seconds:0,
+    minutes:0,
+    mseconds:0,
+    seconds_final:0,
+    minutes_final:0,
+    mseconds_final:0,
+    showed_time:false,
+    showed_popup:false,
     create:function(){
         fireRate = 100;
         nextFire =0 ;
-
-        this.map = game.add.tilemap('mash');
+        
+    
+        this.bosses_killed =0 ;
+        this.map = game.add.tilemap('mash_new');
         this.map.addTilesetImage('magecity','tileset1');
-        this.map.addTilesetImage('town02','tileset2');
-
+        this.follow_timer = game.time.create(false);
+        this.first_boss_shooting_timer = game.time.create(false);
         this.layer2=this.map.createLayer(0);
         this.layer2.resizeWorld();
 
+
+
         this.layer=this.map.createLayer(1);
-        
-        this.map.setCollision([580,581,582,588,589,590,49,50,2684354609,596,597,598,1610612786,58,2684354610,605,685,686,687,688,693,694,695,696,1610612785,3221225522,3221225521,3221226197,3221226181,3221226180,3221226196,2684355269,3221226189,3221226173,3221226172,412,3221226188,1610613445,123,124,2684355268,2684355260,2684354997,3221225900,3221225909,1610613437,131,132,2684355261,437,702,703,704,1610613173,1610613436,1610613444,139,140,710,711,712,147,148,718,719,720,726,727,728,716,700,701,717,724,708,709,725,117,118,119,120,125,126,127,128,133,134,135,136,141,142,143,144,149,150,151,152,641,642,1610613768,1610613776,1610613784,1009,1010,1011,649,650,1610613767,1610613775,1610613783,1017,1018,1019,1020,1610613766,1610613774,1610613782,1025,1026,1027,1028,1029,1030,1031,1032,1610613765,1610613773,1610613781,1033,1034,1035,1036,1037,1038,1039,1040,1610613756,1610613764,1610613772,1610613780,1041,1042,1043,1044,1045,1046,1047,1048,1610613747,1610613755,1610613763,1610613771,1610613779,2684355601,2684355593,2684355585,2684355577,2684355569,1610613746,1610613754,1610613762,1610613770,1610613778,2684355602,2684355594,2684355586,2684355578,2684355570,1610613745,1610613753,1610613761,1610613769,1610613777,2684355603,2684355595,2684355587,2684355579,2684355571,3221226520,3221226519,3221226518,3221226517,3221226516,3221226515,3221226514,3221226513,2684355604,2684355596,2684355588,2684355580,3221226512,3221226511,3221226510,3221226509,3221226508,3221226507,3221226506,3221226505,2684355605,2684355597,2684355589,3221226504,3221226503,3221226502,3221226501,3221226500,3221226499,3221226498,3221226497,2684355606,2684355598,2684355590,3221226492,3221226491,3221226490,3221226489,2684355607,2684355599,2684355591,3221226483,3221226482,3221226481,2684355608,2684355600,2684355592],true,this.layer);
+
+
+        this.map.setCollision([1610612786,2684354610,168,121,122,129,130,141,142,143,144,149,150,151,152,29,1610612785,3221225522,3221225521,165,1610612788,50,51,115,114,2684354609,49,113,30],true,this.layer);
         game.physics.enable(this.layer,Phaser.Physics.ARCADE);
         this.layer.resizeWorld();
 
-        this.player = game.add.sprite(300,300,'king');
+        this.npc_group = game.add.group();
+        this.spawn_npcs();
+        
+        this.player = game.add.sprite(400,400,'king');
         game.physics.enable(this.player,Phaser.Physics.ARCADE);
         this.player.anchor.set(0.5,0.5);
         this.player.body.setSize(32,32,0,32);
@@ -41,36 +80,128 @@ var lobby_2={
         this.player.animations.add('rightMovement',[6,7,8],30,true);
         this.player.animations.add('upwardsMovement',[9,10,11],30,true);
         this.player.animations.add('downMovement',[9,10,11],30,true);
+        this.player.HP = 20;
+        
+
+        this.triggerGroup = game.add.group();
+        init_triggers();
+        init_weapon();
 
         this.keyboard = game.input.keyboard.createCursorKeys();
-    
-        this.bullets = game.add.group();
-        this.bullets.enableBody = true;
-        this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-        this.bullets.createMultiple(50, 'bullet');
-        this.bullets.setAll('checkWorldBounds', true);
-        this.bullets.setAll('outOfBoundsKill', true);
-
-
+        this.pointer = this.input.activePointer;
         this.game.camera.follow(this.player);
-        this.map.createLayer(2);
+         this.map.createLayer(2);
+        this.camera_shaken=false;
 
+        
+        this.mashup_text = game.add.text(32,32,'',{font:"20px Arial",fill:"#000000"});
+
+        
         }, 
+    spawn_npcs:function()
+    {
+        this.wizard1 = game.add.sprite(200,100,'wizard1',2);
+        game.physics.enable(this.wizard1,Phaser.Physics.ARCADE);
+        this.wizard1.anchor.set(0.5,0.5);
+        this.wizard1.scale.setTo(1.2,1.2);
+        this.wizard1.functionality = 'basic';
+        this.wizard1.body.moves = false;
+        this.wizard1.body.moves = false;
 
+        this.wizard2 = game.add.sprite(300,100,'wizard2',2);
+        game.physics.enable(this.wizard2,Phaser.Physics.ARCADE);
+        this.wizard2.anchor.set(0.5,0.5);
+        this.wizard2.scale.setTo(1.2,1.2);
+        this.wizard2.functionality = 'challenge';
+        this.wizard2.immovable = true;
+        this.wizard2.body.moves = false;
+
+        this.npc_group.add(this.wizard1);
+        this.npc_group.add(this.wizard2);
+
+
+    },
     update:function()
     {
-              console.log(game.physics.arcade.collide(this.player, this.layer));
+        if(this.challenge_accepted == false )
+        {
+              game.physics.arcade.collide(this.player, this.layer,null,process_handler,this);
+              game.physics.arcade.collide(this.player,this.npc_group,npc_func,process_handler,this);
+              if(this.bosses_killed == 3)
+              {
 
+                    if(this.camera_shaken==false)
+                    {
+
+                        this.camera.shake(0.0020,2000);
+                        this.camera_shaken=true;
+
+                    }
+
+
+
+              }
+
+                if(this.pointer.isDown)
+                {
+                    this.weapon.fireAtPointer(this.input.activePointer);
+                    Phaser.Math.angleBetween(this.input.activePointer.x,this.input.activePointer.y,this.player.x,this.player.y);
+            
+                }
+            game.physics.arcade.overlap(this.player,this.triggerGroup,init_boss_callbeck,process_handler,this);
+            game.physics.arcade.collide(this.weapon.bullets,this.layer,collide_bullets,process_handler,this);
+          if(this.boss_trigger == true && this.spawned_boss.alive == true)
+          {
+                if(this.spawned_boss.bossNumber == 1 )
+                {
+                        game.physics.arcade.collide(this.player,this.boss_weapon1.bullets,kill_player,process_handler,this);
+                        if(this.follow_timer.running==false){
+
+                       
+                        this.follow_timer.repeat(2000,10000,this.followRobot,this,this.spawned_boss,this.player,this.boss_weapon1);
+                        this.follow_timer.start();
+                        // star_fire(this.boss_weapon1);
+                    }
+
+
+                }
+                if(this.spawned_boss.bossNumber ==3)
+                {       
+                        game.physics.arcade.collide(this.spawned_boss,this.layer);
+                        game.physics.arcade.collide(this.spawned_boss,this.player,collide_player,process_handler,this);
+                        if( this.follow_timer.running==false){
+
+                     
+                        this.follow_timer.repeat(2000,10000,this.followRobot,this,this.spawned_boss,this.player,this.boss_weapon2);
+                        this.follow_timer.start();
+
+                        }
+                }
+                if(this.spawned_boss.bossNumber ==2)
+                {
+                        game.physics.arcade.collide(this.spawned_boss,this.layer);
+                        game.physics.arcade.collide(this.player,this.boss_weapon1.bullets,kill_player,process_handler,this);
+                        if( this.follow_timer.running==false){
+
+                        
+                        this.follow_timer.repeat(2000,10000,this.followRobot,this,this.spawned_boss,this.player,this.boss_weapon1);
+                        this.follow_timer.start();
+
+                        }
+
+                }
+          }
+
+                game.physics.arcade.overlap(this.spawned_boss,this.weapon.bullets,shoot_boss,process_handler,this);
+             if(this.player.alive == true)
+             {
                 this.player.body.velocity.x = 0;
                 this.player.body.velocity.y=0;
-                if(game.input.activePointer.isDown)
-                {
-                    this.fire();
-                }
+
                 if(this.keyboard.left.isDown ){
-                    // player.body.moveLeft(50);
+                    
                     this.player.body.velocity.x -=100;
-                    this.currentAnim = this.player.animations.play('leftMovement',10,true);
+                    this.currentAnim = this.player.animations.play('leftMovement',10,false);
                 }
                 if(this.keyboard.right.isDown){
                     this.player.body.velocity.x +=100;
@@ -78,26 +209,501 @@ var lobby_2={
                 }
                 if(this.keyboard.up.isDown){
                    this.player.body.velocity.y -=100;
-                    this.currentAnim = this.player.animations.play('upwardsMovement',10,true);
+                    this.currentAnim = this.player.animations.play('upwardsMovement',10,false);
                 }
                 if(this.keyboard.down.isDown){
                     this.player.body.velocity.y +=100;
-                    this.currentAnim = this.player.animations.play('downMovement',10,true);
+                    this.currentAnim = this.player.animations.play('downMovement',10,false);
                     
                 }
-    },
-
-    fire:function(){
-        if (game.time.now > this.nextFire && this.bullets.countDead() > 0)
-        {
-            this.nextFire = game.time.now + this.fireRate;
-
-            var bullet = this.bullets.getFirstDead();
-            if (bullet.body.x < game.camera.x){bullet.kill();}
-            bullet.reset(this.player.x - 8, this.player.y - 8);
-
-            game.physics.arcade.moveToPointer(bullet, 300);
+             }
         }
+        else
+        {
+            if(this.bosses_killed == 3)
+            {
+                this.mseconds_final = this.mseconds;
+                this.seconds_final = this.seconds;
+                this.minutes_final = this.minutes;
+                this.showed_time = true;
+        
+            }
+          
+                    this.mseconds++;
+                    if(this.mseconds==100)
+                    {
+                        this.seconds++;
+                        this.mseconds = 0;
+                        if(this.seconds==60)
+                        {
+                            this.minutes++;
+                            this.seconds = 0;
+                        }
+                    }
+                    if(this.showed_time == false)
+                    {
+                        this.mashup_text.destroy();
+                        this.mashup_text = game.add.bitmapText(this.camera.x+50,this.camera.y+50,'font',this.minutes+' : '+this.seconds+' : '+this.mseconds,30);
+                    }
+                    else
+                    {
+                        if(this.showed_popup == false)
+                        {
+                            alert(this.minutes_final+" : "+this.seconds_final+" : "+this.seconds_final);
+                            this.showed_popup = true;
+                        }
+                        if(this.mashup_text.alive == true)
+                            this.mashup_text.kill();
+                    }
+                  
+            
+                    if(this.changes_made == false)
+                    {
+                        this.player.HP = 100;
+                        this.changes_made = true;
+                    }
+                    game.physics.arcade.collide(this.player, this.layer,null,process_handler,this);
+                    game.physics.arcade.collide(this.player,this.npc_group,npc_func,process_handler,this);
+                    if(this.bosses_killed == 3)
+                    {
+
+                            if(this.camera_shaken==false)
+                            {
+
+                                this.camera.shake(0.0020,2000);
+                                this.camera_shaken=true;
+
+                            }
+
+                        console.log("YOU WON THE GAME ");
+
+
+                    }
+
+                        if(this.pointer.isDown)
+                        {
+                            this.weapon.fireAtPointer(this.input.activePointer);
+                            Phaser.Math.angleBetween(this.input.activePointer.x,this.input.activePointer.y,this.player.x,this.player.y);
+                    
+                        }
+                        game.physics.arcade.overlap(this.player,this.triggerGroup,init_boss_callbeck,process_handler,this);
+                        game.physics.arcade.collide(this.weapon.bullets,this.layer,collide_bullets,process_handler,this);
+                    if(this.boss_trigger == true && this.spawned_boss.alive == true)
+                    {
+                            if(this.spawned_boss.bossNumber == 1 )
+                            {
+                                    game.physics.arcade.collide(this.player,this.boss_weapon1.bullets,kill_player,process_handler,this);
+                                    if(this.follow_timer.running==false){
+
+                                  
+                                    this.follow_timer.repeat(2000,10000,this.followRobot,this,this.spawned_boss,this.player,this.boss_weapon1);
+                                    this.follow_timer.start();
+                         
+                                }
+
+
+                            }
+                            if(this.spawned_boss.bossNumber ==3)
+                            {       
+                                    game.physics.arcade.collide(this.spawned_boss,this.layer);
+                                    game.physics.arcade.collide(this.spawned_boss,this.player,collide_player,process_handler,this);
+                                    if( this.follow_timer.running==false){
+
+                                 
+                                    this.follow_timer.repeat(2000,10000,this.followRobot,this,this.spawned_boss,this.player,this.boss_weapon2);
+                                    this.follow_timer.start();
+                       
+                                    }
+                            }
+                            if(this.spawned_boss.bossNumber ==2)
+                            {
+                                    game.physics.arcade.collide(this.spawned_boss,this.layer);
+                                    game.physics.arcade.collide(this.player,this.boss_weapon1.bullets,kill_player,process_handler,this);
+                                    if( this.follow_timer.running==false){
+
+                                 
+                                    this.follow_timer.repeat(2000,10000,this.followRobot,this,this.spawned_boss,this.player,this.boss_weapon1);
+                                    this.follow_timer.start();
+                     
+                                    }
+
+                            }
+                    }
+
+                            game.physics.arcade.overlap(this.spawned_boss,this.weapon.bullets,shoot_boss,process_handler,this);
+                        if(this.player.alive == true)
+                        {
+                            this.player.body.velocity.x = 0;
+                            this.player.body.velocity.y=0;
+
+                            if(this.keyboard.left.isDown ){
+                                
+                                this.player.body.velocity.x -=100;
+                                this.currentAnim = this.player.animations.play('leftMovement',10,false);
+                            }
+                            if(this.keyboard.right.isDown){
+                                this.player.body.velocity.x +=100;
+                                this.currentAnim = this.player.animations.play('rightMovement',10,false);
+                            }
+                            if(this.keyboard.up.isDown){
+                            this.player.body.velocity.y -=100;
+                                this.currentAnim = this.player.animations.play('upwardsMovement',10,false);
+                            }
+                            if(this.keyboard.down.isDown){
+                                this.player.body.velocity.y +=100;
+                                this.currentAnim = this.player.animations.play('downMovement',10,false);
+                                
+                            }
+                        }
+            
+        }
+    },
+    followRobot:function(boss,player,weapon)
+    {
+
+        if(boss.bossNumber == 1)
+        {       
+                boss.animations.play('float',10,true);
+                star_fire(weapon);
+                boss.body.velocity.x = 0;
+                boss.body.velocity.y = 0;
+                if (player.body.x > boss.body.x)
+                {
+
+                    boss.body.velocity.x = boss.body.velocity.x+50;
+                }
+                else
+                {
+
+                    boss.body.velocity.x = boss.body.velocity.x-50;
+                }
+                if (player.body.y > boss.body.y)
+                {
+
+                    boss.body.velocity.y = boss.body.velocity.y+50;
+                }
+                else
+                {
+                        boss.body.velocity.y = boss.body.velocity.y-50;
+
+                }
+        }
+        if(boss.bossNumber == 2)
+        {
+                boss.body.velocity.x = 0;
+                boss.body.velocity.y = 0;
+                angle_variance_fire(boss,player,weapon);
+                if (player.body.x > boss.body.x)
+                {
+
+                    boss.body.velocity.x = boss.body.velocity.x+50;
+                }
+                else
+                {
+
+                    boss.body.velocity.x = boss.body.velocity.x-50;
+                }
+                if (player.body.y > boss.body.y)
+                {
+
+                    boss.body.velocity.y = boss.body.velocity.y+50;
+                }
+                else
+                {
+                        boss.body.velocity.y = boss.body.velocity.y-50;
+
+                }
+        }
+        if(boss.bossNumber == 3){
+                
+            boss.body.velocity.x = 0;
+            boss.body.velocity.y = 0;
+            
+            if (player.body.x > boss.body.x)
+            {
+
+                boss.body.velocity.x = boss.body.velocity.x+200;
+                
+            }
+            else
+            {
+
+                boss.body.velocity.x = boss.body.velocity.x-200;
+            }
+            
+            if (player.body.y > boss.body.y)
+            {
+
+                boss.body.velocity.y = boss.body.velocity.y+200;
+            }
+            else
+            {
+                    boss.body.velocity.y = boss.body.velocity.y-200;
+
+            }
+        }
+    }
+
+}
+  function init_triggers(){
+
+        lobby_2.first_trigger = game.add.sprite(170,1100,null);
+        game.physics.enable(lobby_2.first_trigger,Phaser.Physics.ARCADE);
+        lobby_2.first_trigger.anchor.set(0.5,0.5);
+        lobby_2.first_trigger.body.setSize(200,60,0,0);
+        lobby_2.first_trigger.bossToSpawn = 1;
+
+        
+        lobby_2.second_trigger = game.add.sprite(868,900,null);
+        game.physics.enable(lobby_2.second_trigger,Phaser.Physics.ARCADE);
+        lobby_2.second_trigger.anchor.set(0.5,0.5);
+        lobby_2.second_trigger.body.setSize(158,60,0,0);
+        lobby_2.second_trigger.bossToSpawn = 2;
+
+        lobby_2.third_trigger = game.add.sprite(868,160,null);
+        game.physics.enable(lobby_2.third_trigger,Phaser.Physics.ARCADE);
+        lobby_2.third_trigger.anchor.set(0.5,0.5);
+        lobby_2.third_trigger.body.setSize(60,190,0,0);
+        lobby_2.third_trigger.bossToSpawn = 3;
+
+        lobby_2.triggerGroup.add(lobby_2.first_trigger);
+        lobby_2.triggerGroup.add(lobby_2.second_trigger);
+        lobby_2.triggerGroup.add(lobby_2.third_trigger);
+
 
     }
+
+  function init_boss(number){
+
+        if(number == 1 )
+        {
+
+            lobby_2.boss1 = game.add.sprite(300,1270,'boss1');
+            lobby_2.boss1.anchor.set(0.5,0.5);
+            lobby_2.boss1.scale.setTo(1,1);
+            lobby_2.boss1.health = 15;
+            lobby_2.boss1.bossNumber = 1;
+            init_boss_weapon(lobby_2.boss1);
+            game.physics.enable(lobby_2.boss1,Phaser.Physics.ARCADE);
+            lobby_2.boss_trigger =true ;
+            lobby_2.boss1.animations.add('float',[0,1,2],30,true);
+             lobby_2.spawned_boss = lobby_2.boss1;
+
+
+        
+ 
+
+
+        }
+        if(number ==2)
+        {
+            lobby_2.boss2 = game.add.sprite(1300,1270,'boss2');
+            lobby_2.boss2.anchor.set(0.5,0.5);
+            lobby_2.boss2.scale.setTo(1,1);
+            lobby_2.boss2.health = 15;
+            lobby_2.boss2.bossNumber = 2;           
+            game.physics.enable(lobby_2.boss2,Phaser.Physics.ARCADE); 
+            init_boss_weapon(lobby_2.boss2);         
+            lobby_2.boss_trigger =true ;
+            lobby_2.spawned_boss = lobby_2.boss2;
+            
+
+
+        }
+        if(number ==3 )
+        {
+            lobby_2.boss3 = game.add.sprite(1270,300,'boss3');
+            lobby_2.boss3.anchor.set(0.5,0.5);
+            lobby_2.boss3.scale.setTo(1,1);
+            lobby_2.boss3.health = 15;
+            lobby_2.boss3.bossNumber = 3;
+            
+            game.physics.enable(lobby_2.boss3,Phaser.Physics.ARCADE);    
+            init_boss_weapon(lobby_2.boss3);        
+            lobby_2.boss_trigger =true ;
+            lobby_2.spawned_boss = lobby_2.boss3;
+            
+ 
+
+        }
+  }
+  function init_boss_callbeck(player,trigger)
+  {
+      init_boss(trigger.bossToSpawn);
+      trigger.destroy();
+  }
+
+  function init_weapon()
+  {
+      lobby_2.weapon = game.add.weapon(100,'bloodBullet');
+        lobby_2.weapon.bulletKilltype = Phaser.Weapon.KILL_WORLD_BOUNDS;
+        lobby_2.weapon.bulletSpeed= 300;
+        lobby_2.weapon.fireRate = 200;
+
+        lobby_2.weapon.addBulletAnimation('fire',[1,2,3,4,5,6],30,true);
+        lobby_2.weapon.trackSprite(lobby_2.player);
+
+        var bulletArray=lobby_2.weapon.bullets.children;
+        
+        for(bullet=0;bullet<bulletArray.length;bullet++){
+            bulletArray[bullet].scale.setTo(0.2,0.2);
+            bulletArray[bullet].body.updateBounds();
+        }
+  }
+
+  function shoot_boss(boss,bullet,weapon)
+  {
+      if(boss.bossNumber == 1){
+            bullet.kill();
+            if(boss.health>1)
+            {
+                boss.health = boss.health -1 ;
+                star_fire(lobby_2.boss_weapon1);
+            }
+            else
+            {
+                    lobby_2.boss_trigger = false;
+                    lobby_2.follow_timer.stop();
+                    // lobby_2.boss_weapon1.destroy();
+                    boss.kill();
+                    lobby_2.bosses_killed  = lobby_2.bosses_killed + 1;
+                    
+                    
+            }
+      }
+      if(boss.bossNumber == 3){
+            bullet.kill();
+            if(boss.health>1)
+            {
+                boss.health = boss.health -1 ;
+ 
+            }
+            else
+            {
+                    lobby_2.boss_trigger = false;
+                    lobby_2.follow_timer.stop();
+   
+                    boss.kill();
+                    lobby_2.bosses_killed  = lobby_2.bosses_killed + 1;
+                    
+                    
+            }
+      }
+        if(boss.bossNumber == 2){
+        bullet.destroy();
+        if(boss.health>1)
+        {
+            boss.health = boss.health -1 ;
+
+        }
+        else
+        {
+                lobby_2.boss_trigger = false;
+                lobby_2.follow_timer.stop();
+                lobby_2.boss_weapon1.destroy();
+                boss.kill();
+                lobby_2.bosses_killed  = lobby_2.bosses_killed + 1;
+                
+                
+        }
+      }
+  }
+  function init_boss_weapon(boss)
+  {
+        lobby_2.boss_weapon1 = game.add.weapon(50,'bloodBullet');
+        lobby_2.boss_weapon1.bulletKilltype = Phaser.Weapon.KILL_WORLD_BOUNDS;
+        lobby_2.boss_weapon1.bulletSpeed= 300;
+        lobby_2.boss_weapon1.fireRate = 200;
+        lobby_2.boss_weapon1.multiFire = true;
+        lobby_2.boss_weapon1.addBulletAnimation('fire',[1,2,3,4,5,6],30,true);
+        lobby_2.boss_weapon1.trackSprite(boss);
+        // lobby_2.weapon.trackOffset.y = 16;
+        // lobby_2.weapon.trackOffset.x = 32;
+        var bulletArray=lobby_2.boss_weapon1.bullets.children;
+        
+        for(bullet=0;bullet<bulletArray.length;bullet++){
+            bulletArray[bullet].scale.setTo(0.2,0.2);
+            bulletArray[bullet].body.updateBounds();
+        }
+  }
+  function star_fire(weapon)
+  {
+    var num = game.rnd.integerInRange(40,45);
+    weapon.fireAngle += num;
+    weapon.fire();
+    weapon.fireAngle += num;
+    weapon.fire();
+    weapon.fireAngle += num;
+    weapon.fire();
+    weapon.fireAngle += num;
+    weapon.fire();
+    weapon.fireAngle += num;
+    weapon.fire();
+    weapon.fireAngle += num;
+    weapon.fire();
+    weapon.fireAngle += num;
+    weapon.fire();
+    weapon.fireAngle += num;
+    weapon.fire();
+    weapon.fireAngle += num;
+    weapon.fire();  
+  }
+function kill_player(player,bullet)
+{ 
+    bullet.destroy();
+    player.HP = player.HP-1;
+
+    if(player.HP==0){
+        player.kill();
+        lobby_2.boss_trigger = false;
+        lobby_2.challenge_accepted = false;
+        lobby_2.seconds = 0;
+        lobby_2.mseconds = 0;
+        lobby_2.changes_made = false;
+        game.state.start('lobby2');
+    }
+    // return player;
+
+}
+function angle_variance_fire(boss,player,weapon){
+    weapon.bulletAngleVariance = 20;
+    weapon.fireAtSprite(player);
+    weapon.fireAtSprite(player);
+}
+function collide_bullets(bullet)
+{
+    bullet.kill();
+}
+function collide_player(boss,player)
+{
+     player.kill();
+     lobby_2.boss_trigger = false;
+     lobby_2.challenge_accepted = false;
+     lobby_2.seconds = 0;
+     lobby_2.mseconds = 0;
+     lobby_2.changes_made = false;
+     game.state.start('lobby2');
+}
+function process_handler(sprite)
+{
+    if(sprite.alive==true)
+        return true;
+    else
+        return false;
+}
+function npc_func(player,group){
+    group.body.velocity.x = 0;
+    group.body.velocity.y = 0;
+    if(group.functionality == 'basic')
+    {
+       
+        console.log('MASHUP TEXT');
+    }
+    else
+    {
+        lobby_2.challenge_accepted = true;
+
+        console.log('not mashup text');
+    }
+
 }

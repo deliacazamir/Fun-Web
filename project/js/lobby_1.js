@@ -17,6 +17,7 @@ var lobby_1={
     weapon:null,
     pointer:null,
     bloodBullet:null,
+    player2:null,
 
     create:function(){
         fireRate = 100;
@@ -31,46 +32,49 @@ var lobby_1={
         layer2.resizeWorld();
         //Create the second layer and initialise collision
         layer = map.createLayer(1);
-        http_point = game.add.sprite(256,160,null);
+        http_point = game.add.sprite(270,175,null);
         game.physics.enable(http_point,Phaser.Physics.ARCADE);
-        http_point.anchor.set(1,1);
-        http_point.body.setSize(32,32,0,32);
+        http_point.anchor.set(0.5,0.5);
+        http_point.body.setSize(32,32,0,0);
 
         map.setCollision([2684355515,133,134,135,955,986,3221226418,956,1001,1002,953,3221226427,1610613738,903,904,2684355561,1019,1020,1610613737,2684355562,1014,1015,961,1022,1023,957,3221226417,945,1610613691,948,963],true,layer);
         game.physics.enable(layer,Phaser.Physics.ARCADE);
         layer.resizeWorld();
         //add the player to the layer and enable physics
-        this.player = game.add.sprite(256,300,'king',2);
+        this.player = game.add.sprite(256,300,'king');
         this.player.anchor.set(0.5,0.5);
         game.physics.enable(this.player,Phaser.Physics.ARCADE);
 
-        this.player.body.setSize(32,32,0,64);
-        
-   
+        this.player.body.setSize(32,32,0,32);
+
         this.player.body.allowRotation=false;
-        //add animations for the player
+
         this.player.animations.add('leftMovement',[3,4,5],30,true);
         this.player.animations.add('rightMovement',[6,7,8],30,true);
         this.player.animations.add('upwardsMovement',[9,10,11],30,true);
         this.player.animations.add('downMovement',[9,10,11],30,true);
-        //crate cursor keys
+
         keyboard = game.input.keyboard.createCursorKeys();
 
-    //   /  this.bloodBullet = 
+
         this.pointer = this.input.activePointer;
 
         this.weapon = game.add.weapon(50,'bloodBullet');
         this.weapon.bulletKilltype = Phaser.Weapon.KILL_WORLD_BOUNDS;
-        this.weapon.bulletSpeed= 1000;
-        this.weapon.fireRate = 30;
+        this.weapon.multiFire = true;
+        this.weapon.bulletSpeed= 300;
+        this.weapon.fireRate = 200;
         this.weapon.addBulletAnimation('fire',[1,2,3,4,5,6],30,true);
-        // this.weapon.trackSprite(player);
+
         this.weapon.trackedSprite = this.player;
         this.weapon.trackOffset.y = 16;
         this.weapon.trackOffset.x = 32;
         var bulletArray=this.weapon.bullets.children;
         for(bullet=0;bullet<bulletArray.length;bullet++){
-            bulletArray[bullet].scale.setTo(0.3,0.3);
+            bulletArray[bullet].scale.setTo(0.2,0.2);
+            bulletArray[bullet].body.updateBounds();
+
+            
         }
         game.camera.follow(this.player);
         map.createLayer(2);
@@ -85,9 +89,6 @@ var lobby_1={
         }
 
 
-
-
-                game.debug.spriteInfo(this.player, 32, 32);
                 console.log(game.physics.arcade.collide(this.player, layer));
 
                 this.player.body.velocity.x = 0;
@@ -95,6 +96,8 @@ var lobby_1={
                 if(this.pointer.isDown)
                 {
                     this.weapon.fire(this.player,this.pointer.x,this.pointer.y);
+
+                 
                 }
 
 
@@ -122,19 +125,7 @@ var lobby_1={
     
 
     },
-
-    fire:function(){
-            
-        if (game.time.now > nextFire && bullets.countDead() > 0)
-        {
-            nextFire = game.time.now + fireRate;
-
-            var bullet = bullets.getFirstDead();
-
-            bullet.reset(player.x - 8, player.y - 8);
-
-            game.physics.arcade.moveToPointer(bullet, 300);
-        }
+    render:function() {
 
     }
 
